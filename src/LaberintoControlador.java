@@ -2,20 +2,18 @@ import java.awt.Color;
 import java.util.*;
 
 public class LaberintoControlador {
-    private Laberinto laberinto;
-    private List<int[]> path; 
-    
+    private final Laberinto laberinto;
+    private final List<int[]> path; 
+
     public LaberintoControlador(int ancho, int alto) {
         this.laberinto = new Laberinto(ancho, alto);
         this.path = new ArrayList<>();
     }
 
-    
     public Laberinto getLaberinto() {
         return this.laberinto;
     }
 
-    
     public void toggleCelda(int row, int col) {
         this.laberinto.toggleCelda(row, col);
     }
@@ -160,5 +158,16 @@ public class LaberintoControlador {
         for (int[] coords : path) {
             laberinto.getCelda(coords[0], coords[1]).setColor(pathColor);
         }
+    }
+
+    // Método para marcar una celda como obstáculo
+    public boolean markObstacle(int i, int j) {
+        laberinto.getCelda(i, j).setEstado(true); // Establecer estado como obstáculo (true)
+        return true;
+    }
+
+    // Método para remover un obstáculo de una celda
+    public void removeObstacle(int i, int j) {
+        laberinto.getCelda(i, j).setEstado(false); // Establecer estado como libre (false)
     }
 }

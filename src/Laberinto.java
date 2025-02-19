@@ -1,7 +1,7 @@
 public class Laberinto {
-    private Celda[][] celdas;
-    private int ancho;
-    private int alto;
+    private final Celda[][] celdas;
+    private final int ancho;
+    private final int alto;
 
     
     public Laberinto(int ancho, int alto) {

@@ -17,158 +17,329 @@ Meanwhile, the compiled output files will be generated in the `bin` folder by de
 
 The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
 
-PROYECTO FINAL
-En el proyecto final de Estructura de datos hemos hecho un programa donde se trata de un laberinto donde donde se debe utilizar unos metodos como el metodo DFS y BFS donde hemos utilizado 5 clases las cuales osn las siguientes clases (App.java), (Celda.java), (Laberinto.java), (LaberintoControlador.java) y (MazeGenerator.java).
+## PROYECTO FINAL
 
-La clase(Celdas.java):
-las propiedades que utilizamos son estados, esCamino, color.
+- INTEGRANTES: Josue Gallegos, Diego Avila.
 
-estado: es un tipo boolean en la cual indica si la celda es un obstaculo de vuelve un (true) o un camino devuelve un (false).
+La clase MazeGenerator es la encargada de manejar la interfaz gráfica y la lógica para interactuar con el laberinto. Se divide en varias secciones:
 
-esCamino: tambien es un tipo boolean en la cual señala si la celda es parte del camino encontrado por un algoritmo de busqueda.
+## Declaración de variables
 
-color: es del tipo Color en donde almacena el color de la celda, usando para representar visualmente direfentes estados o caminos.
+Contiene elementos de la interfaz como:
 
-Los metodos que utilizamos:
-utilizamos un metodo Celda que es un tipo boolean en a cual es la inicializacion del estado de la celda la celda comienza como no parte del camino(esCamino = false) y sin color (color = null).
+- Campos de texto (JTextField) para ingresar el tamaño del laberinto y el punto de inicio.
+- Botones (JButton) para generar el laberinto, limpiar caminos y resolverlo con diferentes algoritmos.
+- Paneles (JPanel) para organizar los componentes de la interfaz.
+- Etiquetas y área de texto (JLabel, JTextArea) para mostrar coordenadas y tiempo de ejecución.
 
-Tambien se hace los get y los set de la propiedades que asignamos:
+## Constructor (MazeGenerator())
 
-getEstado: devuelve el estado de la celda (obtaculo o camino).
+Configura la ventana principal (JFrame).
+Agrega componentes de entrada, botones y paneles.
+Asigna eventos a los botones para que ejecuten las funciones correspondientes.
 
-setEstado: es un tipo boolean en la cual establece el estado de la celda (puede cambiar entre obtaculo y camino).
+## Generación del laberinto (generateGrid())
 
-tooggleEstado: Cambia el estado de la celda a su opuesto (de obstaculo a camino o viceversa).
+- Obtiene el ancho y alto ingresado por el usuario.
+Inicializa el controlador del laberinto (LaberintoControlador).
+- Crea una cuadrícula (JPanel) con botones (JButton) que representan las celdas.
+- Permite marcar celdas como obstáculos con un clic.
 
-setPath: Marca la celda como parte del camino encontrado o no.
+## Borrar camino (clearPath())
 
-isPath: Verifica si la celda es parte del camino encontrado.
+-Restaura las celdas del laberinto eliminando cualquier camino pintado.
+-Borra las coordenadas mostradas en el área de texto.
 
-isNotVisited: Determina si la celda es un camino no visitado (es decir, no es un obtaculo y no es parte del camino).
+## Resolución del laberinto (startMazeGeneration(String mode))
 
-getColor: Obtiene el color actual de la celda.
+- Obtiene la posición de inicio ingresada por el usuario.
+- Verifica que el punto de inicio no sea un obstáculo.
+- Ejecuta en segundo plano (SwingWorker) el algoritmo seleccionado (BFS, DFS, Normal o Cache).
+- Muestra visualmente el camino recorrido con distintos colores y un retraso (Thread.sleep(100)) para simular la animación.
+- Guarda y muestra las coordenadas de cada paso en un área de texto (JTextArea).
+- Mide el tiempo de ejecución y lo muestra en una etiqueta.
 
-setColor: Establece el color de la celda que puede usarse para representar visualmente el estado de la celda en una interfaz grafica.
+## Interfaz Gráfica (Swing)
 
-La clase Celda se uasa para representar una celda individual en una cuadricula en aplicaciones como laberinto maneja la informacion sobre si la celda es un obtaculo o un camino si es parte del camino encontrado por un algoritmo y permitir cambiar su color para represntar visualmente estos estados.
+Se utiliza JFrame para la ventana principal y se organiza con BorderLayout.
+Los componentes principales:
 
+- Panel de entrada (JPanel inputPanel): Contiene campos de texto y botones.
+- Panel de la cuadrícula (JPanel gridPanel): Representa el laberinto con una malla de botones.
+- Panel de acciones (JPanel actionsPanel): Contiene los botones para iniciar los algoritmos y etiquetas para mostrar coordenadas y tiempo.
 
-La clase(Laberinto.java)
-se utilizaron Celdas, Ancho, Alto como propiedades de esta clase Laberinto.
+## Generación del Laberinto (generateGrid())
 
-Celda: es un tipo Celda en donde es una matriz bidimensional que almacena las celdas del laberinto cada celda es un objetivo de la clase celda.
+- Toma las dimensiones ingresadas.
+- Crea una cuadrícula de botones (JButton), cada uno - representando una celda.
+- Permite marcar obstáculos con el mouse:
+- Clic en una celda blanca → Se convierte en un muro negro.
+- Clic en una celda negra → Se vuelve a habilitar como celda vacía.
 
-Ancho: es de tipo (int) entero el cual es el numero de columnas del laberinto.
+![alt text](image.png)
 
-Alto: es de tipo (int) entero el cual es el numero de filas del laberinto.
+![alt text](image-1.png)
 
-Para los metodos utilizamos:
+## Limpieza del Camino (clearPath())
 
-Laberinto: en la cual creamos un constructor para la inicializacion del laberinto con las dimensiones especificas (ancho y alto).
+- Verifica si hay un laberinto generado.
+- Recorre todas las celdas y elimina cualquier rastro de caminos sin afectar los muros.
+- Borra las coordenadas del área de texto.
 
-getCeldas: es un constructor en el cual devuelve la matriz de celdas del laberinto.
+![alt text](image.png)
 
-getAncho: es un contructor en el cual devuelve el Ancho osea el numero de columnas que se le pide para que forme el laberinto.
+## Ejecución de Algoritmos de Búsqueda
 
-getAlto: es un contructor en el cual devuelve el Alto osea el numero de filas quese le pide para que forme el laberinto.
+Cada vez que se presiona un botón de algoritmo (BFS, DFS, Normal, Cache), se ejecuta startMazeGeneration(String mode).
 
-getCelda: constructor en el que devuelve la celdas en la posicion especifica por los indices de (row)fila y col(columnas). lanza una expresion (indexOutOfBoundsException) si los indices estan fuera de los limites de la matriz.
+Pasos clave:
 
-ToogleCelda: es un constructor en donde altera el estado de las celdas en la posicion especificadas por los indices de row(filas) y col (columnas) en la cual lanza una excepcion si los indices esta fuera de los limites de la matriz.
+- Obtiene las coordenadas de inicio.
+- Verifica que el punto de inicio no sea un obstáculo.
+- Ejecuta en segundo plano (SwingWorker) el algoritmo correspondiente.
+- Al encontrar un camino, lo pinta en la cuadrícula con un color específico.
+- Muestra las coordenadas del camino en un área de texto.
+- Calcula y muestra el tiempo de ejecución.
 
-la clase Laberinto se usa para representar un laberinto como una cuadricula de celdas cada celda puede ser un obstaculo o un camino  la clase proporciona metodos para acceder y modificar las celdas en el laberinto como obtener una celda especifica alterna su estado y acceder a la matriz completa de celda.
+![alt text](image-2.png)
 
+## Uso de SwingWorker para Animación
 
-La clase (LaberintoControlador.java):
+- doInBackground(): Ejecuta el algoritmo en un hilo separado.
+process(List<int[]> chunks): Recibe y pinta los pasos del camino en tiempo real.
+- done(): Muestra el tiempo total de ejecución y un mensaje indicando si se encontró un camino o no.
 
-las Propiedades de la clase son Laberinto y Path:
+![alt text](image-3.png)
 
-Laberinto: es el tipo laberinto en el que representa el laberinto en el que se realiza las busquedas de caminos para utilizar los metodos en los que vamos a utilizar.
+Resumen de Algoritmos Implementados:
 
-Path: es un tipo List<int[]> que describe la lista que almacena el acmino encontrado desde el punto de inicio hasta el punto de fin.
+- Los métodos solveBFS(), solveDFS(), solveNormal() y solveWithCache() pertenecen a LaberintoControlador (no incluido aquí, pero asumimos que tiene la lógica de cada algoritmo).
 
-Metodos de la clase LaberintoControlador:
+- Cada uno de estos algoritmos explora el laberinto para encontrar un camino desde la posición inicial hasta la última celda (width-1, height-1), y al encontrarlo, colorea las celdas recorridas.
 
-LaberintoControlador: es la inicializacion del Controlador con un nuevo laberinto de dimensiones Ancho por Alto y vrea una lista vacia para almacenar el camino.
+## Colores usados en los caminos:
 
-getLaberinto: el que devuelve el objeto Laberinto Asociado con el controlador.
+🟩 Verde → BFS (Anchura)
+![alt text](image-4.png)
+🔵 Azul → DFS (Profundidad)
+![alt text](image-5.png)
+🔴 Rojo → Método normal
+![alt text](image-6.png)
+🟠 Naranja → Método con caché
+![alt text](image-7.png)
 
-ToggleCelda: Altera el estado de la celda en la posicion especifica por row(filas) y col(columnas) en el laberinto.
+## Clase Puntos
 
-SolveBFS: Es la que resuelve el laberinto utilizando el algoritmo de busqueda en anchura(BFS). Marca el camino encontrado uy delvuelve (true) si se encontro un camino, y si no devueleve (false).
+Declara la clase Puntos, que almacenará una lista de coordenadas (x, y).
 
-SolveDFS: Es la que resuelve el laberinto utilizando el algoritmo de busqueda en Profundidad (DFS). Marca el camino encontrado y devuelve un (true) si se encontro un camino y si no se encontro un camino un (false).
+![alt text](image-9.png)
 
-SolveNormal: Es la que resuelve el laberinto utilizando una busqueda normal, que en este caso es equivalente a la busqueda BFS. Marca el camino encontrado y devuelve (true) si se encontro un camino y si no se encontro un camino (false).
+- puntosRecorridos → Es una lista (List<int[]>) de arreglos enteros donde cada elemento representa un punto (x, y).
+- Uso de final → La referencia a la lista no puede cambiar, pero se pueden agregar o eliminar elementos dentro de la lista.
+- new ArrayList<>() → Inicializa la lista vacía.
 
-SolveWithCache: Es la que resuleve el laberinto utilizando BFS con una cache para evitar revistar celdas y utilizar un conjunto (cache) para realizar un seguimiento de las celdas visitadas y evitar procesarlas nuevamente.
+## Método agregarPunto(int x, int y)
 
-RecontructPath: es quien reconstruye el acmino desde el punto final hasta el inicio usando el mapa de padres(parentMap). Invierte el acmino para que este en el orden correcto desde el inicio hasta el final.
+![alt text](image-8.png)
 
-getPath: este es el que devuelve el camino encontrado con  cualquier metodo que se seleccione.
+- Recibe dos enteros X y Y que representan una coordenada en el recorrido.
+- Guarda el punto (x, y) en la lista puntosRecorridos, almacenándolo como un arreglo {x, y}.
+- Imprime el punto en la consola con System.out.println().
 
-markPath: Marca el camino encontrado en ek laberinto con el color especificado(PathColor) establece el color de cada Celda en el camino.
+## Método getPuntosRecorridos()
 
-La clase LaberintoControlador gestiona la Logica de busqueda e caminos dentro del laberinto Proporciona metodos para alterar el estado de las celdas resolver el laberinto utilixando varios algoritmos de Busquedas (BFS, DFS, BFS con cache) y para marcar el acmino encontrado en el laberinto.
+- Devuelve la lista puntosRecorridos, permitiendo acceder a todos los puntos almacenados.
 
-La clase (MazeGenerator.java):
+## Clase Celda
 
-Las propiedades de la clase:
+Este código define la clase Celda, la cual representa una celda dentro de un laberinto. Cada celda puede ser un obstáculo, un camino, o una parte de la solución del laberinto. También se le puede asignar un color para su representación visual.
 
-Campo de Entrada: es donde se ingresa el valor del Ancho del laberinto y el Alto del Laberinto.
+- Declara la clase Celda, que almacenará información sobre si la celda es un obstáculo, parte del camino y su color.
 
-Los Paneles: 
+## Atributos de la Clase
 
-GrindPanel: Es donde se muestra la cuadricula del laberinto segun las medidas que el usuario dio para que se forme el laberinto.
+- estado → Indica si la celda es un obstáculo (true) o un espacio libre (false).
+- esCamino → Indica si la celda forma parte del camino encontrado en la solución del laberinto.
+- color → Permite asignar un - color a la celda para representarla gráficamente.
 
-inputPanel: Es un panel que contiene los campos de entrada y el boton para generar el Laberinto.
+## Constructor de la Clase
 
-ActionsPanel: Panel en donde estan los botones para iniciar la busqueda del laberinto usando diferentes algoritmos.
+- Recibe un parámetro estadoInicial (true o false).
+- Inicializa estado con el valor proporcionado (true = obstáculo, false = libre).
+- Inicializa esCamino en false, porque al inicio no forma parte de ningún camino.
+- Inicializa color en null, porque aún no se ha asignado un color
 
-Botones: 
+## Obtener el estado de la celda
 
-GenerateButton: Boton para que genere un nuevo laberinto con las dimensiones ingresadas.
+- Devuelve true si la celda es un obstáculo.
+- Devuelve false si la celda es un espacio libre.
 
-StartwithBFS: Boton para iniciar la resolucion del laberinto usando el algoritmo BFS(Busqueda en Anchura).
+## Establecer el estado de la celda
 
-StartwithDFS: bton para iniciar la resolucion del laberinto usando el algoritmo DFS(Buqueda en Profundidad).
+- Permite cambiar el estado de la celda (obstáculo o espacio libre).
 
-StartNormal: Boton para Inicar la resolucion del Laberinto usando la busqueda normal(BFS en este caso).
+## Alternar el estado de la celda
 
-StartwithCache: Boton para Iniciar la resolucion del alberin to usando BFS con Cache.
+- Si la celda es un obstáculo (true), la convierte en un espacio libre (false).
+- Si la celda es un espacio libre (false), la convierte en un obstáculo (true).
+- Se usa cuando el usuario hace clic en la celda para cambiar su estado.
 
-clearPathButton: Boton para eliminar el camino encontrado y limpiar los colores en la cuadricula.
+## Marcar la celda como parte del camino
 
-Colores:
+- true → La celda es parte del camino de solución del laberinto.
+- false → La celda no es parte del camino.
 
-Cell Wall: el color de las Celdas que son Paredes en el cual son el color blanco el color de la cuadricula.
+## Verificar si la celda es parte del camino
 
-Cell Path BFS: Color para las celdas del camino encontrado usando BFS en el cual es el color Verde que es para este metodo.
+- Devuelve true si la celda forma parte del camino.
+- Devuelve false si no forma parte del camino.
 
-Cell Path DFS: Color para las celdas del camino encontrado usando las Buqueda normal en el cual este es el color Azul.
+## Verificar si la celda no ha sido visitada
 
-Cell Path Normal: Color para las celdas del camino encontrado usando la busqueda Normal en el cuale es el color Rojo.
+- No es un obstáculo (estado == false)
+- No forma parte del camino (esCamino == false)
+- Se usa para saber si una celda puede ser explorada en la búsqueda de la solución
 
-Cell Path Cache: Color para las celdas del camino encontrado usando BFS con cache en cual es el color Naranja.
+## Obtener el color de la celda
 
-Cell Open: Color para la Celda Abierta o vacia en el cuale es el color Negro.
+- Devuelve el color actual de la celda.
 
-Metodos:
+## Establecer el color de la celda
 
-MazeGenerator: Configura la interfaz grafica Incluyendo la creacion de la ventana principal, paneles y botones tambien agrega ActionListeners para manejar los eventos de los botones.
+- Permite asignar un color a la celda
 
-generateGrid: Crea una nueva cuadratica de botones para representar las celdas del laberinto segun las dimensiones ingresadas cada boton respresenta una celda del laberinto que puede ser alterada entre pared y camino al hacer clic.
+![alt text](image-1.png)
 
-StartMazaGeneration: Inicia a resolucion del laberinto usando el algoritmo especificado (BFS, DFS, NORMAL, CACHE) utilizando la interfaz grafica y mostrando el camino encontrado con color correspondiente.
+## Clase Laberinto
 
-ActualizarInterfaz: Actualiza el color de una celda en la cuadricula grfica para reflejar su estado (Pared, Camino, o Vacio).
+- celdas → Una matriz bidimensional de objetos Celda que representa el laberinto.
+- ancho → Número de columnas del laberinto.
+- alto → Número de filas del laberinto.
 
-ClearPath: Limpia los colores de las celdas que no son paredes para eliminar el camino encontrado anteriormente.
+## Constructor de la Clase
 
-la Clase MazeGenerator proporciona una intefaz grafica de usuario (GUI) para generar laberintos visualizar y manipular su estado y resolver usando diferentes algoritmos de busquedas que permite a los usuarios ingresar las dimensiones del laberinto generar una cuadricula de celdas altenar el estado de las celdas y resolver el laberinto utilizando algoritmos de busqueda.
+- Inicializa ancho y alto con los valores proporcionados.
+- Crea la matriz celdas con las dimensiones [alto][ancho].
+- Llena la matriz con nuevas instancias de Celda, cada una inicializada como un espacio libre (false).
 
-EL la clase App.java
- esta clase nos permite correr el porgrama donde podemos ver que esta unidad todas las clases 
- 
+## Obtener la Matriz de Celdas
 
+- Devuelve la matriz completa de celdas del laberinto.
 
+## Obtener el Ancho del Laberinto
+
+- Devuelve el número total de columnas del laberinto.
+
+## Obtener el Alto del Laberinto
+
+- Devuelve el número total de filas del laberinto.
+
+## Obtener una Celda en una Posición Específica
+
+- Verifica si la posición está dentro de los límites del laberinto.
+- Si es válida, devuelve la celda en esa posición.
+- Si es inválida, lanza una excepción IndexOutOfBoundsException con un mensaje de error.
+
+## Alternar el Estado de una Celda
+
+- Verifica si la posición está dentro de los límites del laberinto.
+- Si es válida, cambia el estado de la celda en esa posición (de obstáculo a libre o viceversa).
+- Si es inválida, lanza una excepción IndexOutOfBoundsException.
+
+![alt text](image-10.png)
+![alt text](image-11.png)
+
+## Clase LaberintoContrlador
+
+La clase LaberintoControlador se encarga de manejar la lógica del laberinto, incluyendo la modificación de celdas y la búsqueda de caminos usando diferentes algoritmos (BFS, DFS y BFS con caché).
+
+Se utiliza en conjunto con las clases Laberinto y Celda, permitiendo resolver el laberinto con distintos enfoques.
+
+- laberinto → Representa el laberinto que se controla.
+- path → Almacena la secuencia de celdas que forman la ruta desde el inicio hasta el final.
+
+- Crea una instancia del laberinto con las dimensiones especificadas.
+- Inicializa la lista path que guardará la solución encontrada
+- Devuelve el objeto Laberinto que contiene la matriz de celdas.
+- Cambia entre obstáculo (true) y camino libre (false) en la celda dada.
+
+## Algoritmo BFS (Breadth-First Search - Búsqueda en Anchura)
+
+ ## ¿Cómo funciona?
+
+- Usa una cola queue para recorrer el laberinto por niveles.
+- Guarda los padres de cada celda en parentMap para reconstruir el camino después.
+- Si encuentra la celda final, reconstruye el camino y retorna true.
+
+![alt text](image-4.png)
+
+## Algoritmo DFS (Depth-First Search - Búsqueda en Profundidad)
+
+## ¿Cómo funciona?
+
+- Usa una pila stack para recorrer en profundidad primero.
+- Similar a solveBFS, pero explora un camino hasta el fondo antes de retroceder.
+
+![alt text](image-5.png)
+
+## Búsqueda Normal (BFS)
+
+Simplemente llama a solveBFS() como método por defecto.
+
+![alt text](image-6.png)
+
+## BFS con Caché (Optimizado)
+
+## ¿Cómo funciona?
+
+- Usa un Set<String> como caché para evitar explorar la misma celda más de una vez
+
+- Es similar a solveBFS(), pero más eficiente
+
+![alt text](image-7.png)
+
+## Reconstrucción del Camino
+
+ ## ¿Qué hace?
+
+- Usa el parentMap para reconstruir la ruta desde el final hasta el inicio.
+- Invierte el camino (Collections.reverse()) para que esté en orden correcto
+
+## Obtener el Camino Encontrado
+
+- Devuelve la lista de celdas en la ruta encontrada
+
+## Marcar el Camino con un Color
+
+- Colorea todas las celdas en el camino encontrado con el color especificado.
+
+## Marcar una Celda como Obstáculo
+
+- Convierte una celda en un obstáculo (true).
+
+## Eliminar un Obstáculo
+
+- Convierte una celda en camino libre (false).
+
+## CONCLUSION
+
+Los códigos implementados permiten la creación, manipulación y resolución de un laberinto utilizando diferentes enfoques algorítmicos. Este sistema está bien estructurado en varias clases, cada una con una responsabilidad específica, lo que lo hace modular, escalable y fácil de entender.
+
+## 1️. Laberinto
+
+- Representa la estructura de la cuadrícula donde se almacenan las celdas.
+- Permite acceder y modificar cada celda individualmente.
+
+## 2. Celda
+
+- Representa una celda dentro del laberinto.
+- Puede ser un obstáculo o un camino libre.
+- Tiene métodos para cambiar su estado y color.
+
+## 3️. LaberintoControlador
+
+- Es el núcleo de la lógica: permite modificar el laberinto y buscar rutas.
+- Implementa los algoritmos BFS (anchura), DFS (profundidad) y BFS con caché para resolver el laberinto.
+- Puede marcar obstáculos y reconstruir caminos.
+
+Este proyecto demuestra un buen uso de estructuras de datos y algoritmos de búsqueda aplicados a la resolución de laberintos. Su modularidad permite futuras expansiones y optimizaciones, convirtiéndolo en una excelente base para aplicaciones más avanzadas en inteligencia artificial y simulaciones.
