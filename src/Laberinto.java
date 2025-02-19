@@ -9,7 +9,7 @@ public class Laberinto {
         this.alto = alto;
         this.celdas = new Celda[alto][ancho];
         
-        // Inicializar cada celda del laberinto
+        
         for (int i = 0; i < alto; i++) {
             for (int j = 0; j < ancho; j++) {
                 this.celdas[i][j] = new Celda(false); 

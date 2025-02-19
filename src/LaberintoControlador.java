@@ -18,7 +18,7 @@ public class LaberintoControlador {
         this.laberinto.toggleCelda(row, col);
     }
 
-    // Método para resolver el laberinto utilizando BFS
+    
     public boolean solveBFS(int startRow, int startCol, int endRow, int endCol) {
         boolean[][] visited = new boolean[laberinto.getAlto()][laberinto.getAncho()];
         Queue<int[]> queue = new LinkedList<>();
@@ -52,10 +52,10 @@ public class LaberintoControlador {
             }
         }
 
-        return false; // No se encontró un camino
+        return false; 
     }
 
-    // Método para resolver el laberinto utilizando DFS
+    
     public boolean solveDFS(int startRow, int startCol, int endRow, int endCol) {
         boolean[][] visited = new boolean[laberinto.getAlto()][laberinto.getAncho()];
         Stack<int[]> stack = new Stack<>();
@@ -89,15 +89,15 @@ public class LaberintoControlador {
             }
         }
 
-        return false; // No se encontró un camino
+        return false; 
     }
 
-    // Método para resolver el laberinto utilizando una búsqueda normal (por ejemplo, BFS)
+   
     public boolean solveNormal(int startRow, int startCol, int endRow, int endCol) {
         return solveBFS(startRow, startCol, endRow, endCol);
     }
 
-    // Método para resolver el laberinto utilizando BFS con caché
+    
     public boolean solveWithCache(int startRow, int startCol, int endRow, int endCol) {
         boolean[][] visited = new boolean[laberinto.getAlto()][laberinto.getAncho()];
         Queue<int[]> queue = new LinkedList<>();
@@ -138,16 +138,16 @@ public class LaberintoControlador {
             }
         }
 
-        return false; // No se encontró un camino
+        return false; 
     }
 
-    // Método para reconstruir el camino desde el final hasta el inicio
+    
     private void reconstructPath(Map<int[], int[]> parentMap, int[] end) {
         path.clear();
         for (int[] at = end; at != null; at = parentMap.get(at)) {
             path.add(at);
         }
-        Collections.reverse(path); // Invertir el camino para que vaya desde el inicio hasta el final
+        Collections.reverse(path);
     }
 
     public List<int[]> getPath() {
@@ -160,14 +160,14 @@ public class LaberintoControlador {
         }
     }
 
-    // Método para marcar una celda como obstáculo
+    
     public boolean markObstacle(int i, int j) {
-        laberinto.getCelda(i, j).setEstado(true); // Establecer estado como obstáculo (true)
+        laberinto.getCelda(i, j).setEstado(true); 
         return true;
     }
 
-    // Método para remover un obstáculo de una celda
+   
     public void removeObstacle(int i, int j) {
-        laberinto.getCelda(i, j).setEstado(false); // Establecer estado como libre (false)
+        laberinto.getCelda(i, j).setEstado(false); 
     }
 }
